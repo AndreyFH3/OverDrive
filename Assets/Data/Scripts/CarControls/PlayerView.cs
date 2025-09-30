@@ -53,10 +53,10 @@ public class PlayerView : MonoBehaviour
     private void Brake(bool value)
     {
         var force = value ? _brakeForce : 0;
-        //_rightFrontCollider.brakeTorque = force;
-        //_leftFrontCollider.brakeTorque = force;
-        _rightBackCollider.brakeTorque = force;
-        _leftBackCollider.brakeTorque = force;
+        _rightFrontCollider.brakeTorque = force * .7f;
+        _leftFrontCollider.brakeTorque = force * .7f;
+        _rightBackCollider.brakeTorque = force * .3f;
+        _leftBackCollider.brakeTorque = force * .3f;
     }
 
     private void Move(float value)

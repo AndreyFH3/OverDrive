@@ -3,11 +3,11 @@ using Zenject;
 
 public class PlayerPresenter
 {
-
     private PlayerInputViewModel inputVM;
 
+
     [Inject]
-    public void Init(PlayerInputViewModel input, PlayerView view)
+    public void Init(PlayerInputViewModel input)
     {
         inputVM = input;
     }

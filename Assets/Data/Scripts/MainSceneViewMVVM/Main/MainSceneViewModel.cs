@@ -8,17 +8,15 @@ public class MainSceneViewModel
     public MainSceneViewModel(MainSceneModel model, MainSceneView view)
     {
         _model = model;
-        _view = view;
-
-        Subscribe();
     }
 
-    private void Subscribe()
+    public void OnLoadScene()
     {
-        _view.StartButton.OnClickAsObservable()
-            .Subscribe(_ => 
-            { 
-                _model.LoadScene();
-            });
+        _model.LoadScene();
+    }
+    
+    public void Exit()
+    {
+        _model.Exit();
     }
 }
