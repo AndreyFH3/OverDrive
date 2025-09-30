@@ -2298,7 +2298,7 @@ MonoBehaviour:
   _nextCar: {fileID: 1864893521}
   _previousCar: {fileID: 2869587}
   _closeSelect: {fileID: 1122124258}
-  _startSelect: {fileID: 0}
+  _startSelect: {fileID: 1678311486}
   _parent: {fileID: 268109641}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
