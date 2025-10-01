@@ -36,7 +36,6 @@ public class CarSelectViewModel
         _container.LoadCar(_model.CurrentCarId, transform =>
         {
             _carTransformStream.OnNext(transform);
-
         });
     }
 
