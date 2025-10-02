@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
+using UniRx;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -15,7 +16,9 @@ public class CarContainer : ScriptableObject
     private async UniTask<Transform> LoadCarInternal(string id)
     {
         if (_cache.TryGetValue(id, out var handle))
+        {
             return handle.Result.transform;
+        }
 
         var handleNew = Addressables.LoadAssetAsync<GameObject>(id);
         var prefab = await handleNew.ToUniTask();

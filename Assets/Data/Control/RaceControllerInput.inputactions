@@ -1,6 +1,6 @@
 {
     "version": 1,
-    "name": "RaceController",
+    "name": "RaceControllerInput",
     "maps": [
         {
             "name": "CarController",
@@ -10,7 +10,7 @@
                     "name": "Boost",
                     "type": "Value",
                     "id": "18196314-1d94-46b1-89ca-ae47fac1aee3",
-                    "expectedControlType": "Axis",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true

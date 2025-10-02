@@ -4,11 +4,11 @@ using Zenject;
 
 public class PlayerInputController : MonoBehaviour
 {
-    private RaceController _controls;
+    private RaceControllerInput _controls;
     private PlayerInputViewModel viewModel;
 
     [Inject]
-    public void Init(PlayerInputViewModel vm, RaceController controls)
+    public void Init(PlayerInputViewModel vm, RaceControllerInput controls)
     {
         viewModel = vm;
         _controls = controls;

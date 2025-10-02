@@ -127,6 +127,7 @@ MonoBehaviour:
   _leftFrontTransform: {fileID: 4992394871071321612}
   _rightBackTransform: {fileID: 2814897641677932719}
   _leftBackTransform: {fileID: 4444893451432539818}
+  _rb: {fileID: 8766292064417038678}
   _motorTorque: 800
   _motorTorqueReverse: 400
   _steerAngle: 45

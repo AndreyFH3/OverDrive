@@ -1,3 +1,4 @@
+using System;
 using Cysharp.Threading.Tasks;
 using UniRx;
 using UnityEngine;
@@ -15,6 +16,8 @@ public class PlayerView : MonoBehaviour
     [SerializeField] private Transform _rightBackTransform;
     [SerializeField] private Transform _leftBackTransform;
 
+    [SerializeField]
+    private Rigidbody _rb;
     #region modelData
     [SerializeField] private float _motorTorque = 2500;
     [SerializeField] private float _motorTorqueReverse = 500;
@@ -23,6 +26,11 @@ public class PlayerView : MonoBehaviour
     #endregion
 
     private PlayerInputViewModel inputVM;
+
+    private Subject<Unit> _magnitudeRbStream = new();
+    public Rigidbody Rigidbody => _rb;
+    public IObservable<Unit> MagnitudeRBStream => _magnitudeRbStream;
+
     [Inject]
     public void Init(PlayerInputViewModel vm)
     {
@@ -85,6 +93,7 @@ public class PlayerView : MonoBehaviour
         UpdateWheelPose(_leftFrontCollider, _leftFrontTransform);
         UpdateWheelPose(_rightBackCollider, _rightBackTransform);
         UpdateWheelPose(_leftBackCollider, _leftBackTransform);
+        _magnitudeRbStream.OnNext(Unit.Default);
     }
     private void UpdateWheelPose(WheelCollider collider, Transform trans)
     {
