@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Cysharp.Threading.Tasks;
 using UniRx;
 using UnityEngine;
@@ -24,6 +24,13 @@ public class PlayerView : MonoBehaviour
     [SerializeField] private float _steerAngle = 30;
     [SerializeField] private float _brakeForce = 800;
     #endregion
+    
+    private Vector3 _lastVelocity;
+    private float flwTorque = 0;
+    private float frwTorque = 0;
+    private float blwTorque = 0;
+    private float brwTorque = 0;
+    private bool isPaused;
 
     private PlayerInputViewModel inputVM;
 
@@ -32,10 +39,37 @@ public class PlayerView : MonoBehaviour
     public IObservable<Unit> MagnitudeRBStream => _magnitudeRbStream;
 
     [Inject]
-    public void Init(PlayerInputViewModel vm)
+    public void Init(PlayerInputViewModel vm, RaceUIViewModel uiVM)
     {
         inputVM = vm;
+        uiVM.RaceState
+            .Subscribe(state => 
+            {
+                if (state != RaceState.Running && state != RaceState.Finished)
+                {
+                    _lastVelocity = _rb.linearVelocity;
+                    flwTorque = _rightBackCollider.motorTorque;
+                    frwTorque = _leftBackCollider.motorTorque;
+                    blwTorque = _rightFrontCollider.motorTorque;
+                    brwTorque = _leftFrontCollider.motorTorque;
 
+                    _rightBackCollider.motorTorque = 0;
+                    _leftBackCollider.motorTorque = 0;
+                    _rightFrontCollider.motorTorque = 0;
+                    _leftFrontCollider.motorTorque = 0;
+
+                    isPaused = true;
+                }
+                else
+                { 
+                    isPaused = false;
+                    _rightBackCollider.motorTorque = flwTorque;
+                    _leftBackCollider.motorTorque = frwTorque;
+                    _rightFrontCollider.motorTorque = blwTorque;
+                    _leftFrontCollider.motorTorque = brwTorque;
+                }
+            })
+            .AddTo(this);
 
         inputVM.Move
             .ObserveOnMainThread()
@@ -60,6 +94,7 @@ public class PlayerView : MonoBehaviour
 
     private void Brake(bool value)
     {
+        if (isPaused) return;
         var force = value ? _brakeForce : 0;
         _rightFrontCollider.brakeTorque = force * .7f;
         _leftFrontCollider.brakeTorque = force * .7f;
@@ -69,6 +104,7 @@ public class PlayerView : MonoBehaviour
 
     private void Move(float value)
     {
+        if (isPaused) return;
         _rightBackCollider.motorTorque = value * _motorTorque;
         _leftBackCollider.motorTorque = value * _motorTorque;
         //_rightFrontCollider.motorTorque = value * _motorTorque;
@@ -76,6 +112,7 @@ public class PlayerView : MonoBehaviour
     }
     private void MoveReverse(float value)
     {
+        if (isPaused) return;
         _rightBackCollider.motorTorque = -value * _motorTorqueReverse;
         _leftBackCollider.motorTorque = -value * _motorTorqueReverse;
         //_rightFrontCollider.motorTorque = -value * _motorTorque;

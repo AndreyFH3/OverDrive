@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using UniRx;
@@ -31,6 +31,8 @@ public class CarContainer : ScriptableObject
 
     public void LoadCar(string id, Action<Transform> onSuccess)
     {
+        if (string.IsNullOrEmpty(id))
+            id = _carIds[0];
         LoadCarAsync(id, onSuccess).Forget();
     }
 

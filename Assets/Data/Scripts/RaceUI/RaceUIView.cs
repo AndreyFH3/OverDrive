@@ -1,14 +1,16 @@
-using Cysharp.Threading.Tasks;
+﻿using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using Zenject;
 using UniRx;
+
 public class RaceUIView : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI _speedText;
     [SerializeField] private TextMeshProUGUI _lapsText;
     [SerializeField] private TextMeshProUGUI _timerText;
-
+    [SerializeField] private TextMeshProUGUI _timerStartText;
+    
     [Inject]
     public void Init(RaceUIViewModel vm)
     {
@@ -21,20 +23,41 @@ public class RaceUIView : MonoBehaviour
         vm.Timer
             .Subscribe(SetTimer)
             .AddTo(this);
+        vm.TimerStart
+            .Subscribe(SetStartTimer)
+            .AddTo(this);
+        vm.RaceState
+            .Subscribe(DisableTimer)
+            .AddTo(this);
     }
 
-    public void SetSpeed(float value)
+    private void SetSpeed(float value)
     {
-        _speedText.text = $"{Mathf.Round(value)}km/h";
+        float speedRB = value * 3.6f;
+
+        _speedText.text = $"{Mathf.Round(speedRB)}km/h";
     }
 
-    public void SetLaps(int current, int target)
+    private void SetLaps(int current, int target)
     {
         _lapsText.text = $"Laps: {current}/{target}";
     }
 
-    public void SetTimer(float value)
+    private void SetTimer(float value)
     {
-        _timerText.text = $"{value / 60}:{value % 60}";
+        _timerText.text = $"{(int)(value / 60)}:{(int)(value % 60)}";
+    }
+
+    private void DisableTimer(RaceState state)
+    {
+        if (!_timerStartText.IsActive() || RaceState.Prepare == state) return;
+            _timerStartText.gameObject.SetActive(false);
+    }
+
+    private void SetStartTimer(float value)
+    {
+        if(value <= 0) 
+            _timerStartText.gameObject.SetActive(false);
+        _timerStartText.text = $"{Mathf.RoundToInt(value)}";
     }
 }
