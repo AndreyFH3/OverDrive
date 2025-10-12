@@ -45,7 +45,9 @@ public class RaceUIView : MonoBehaviour
 
     private void SetTimer(float value)
     {
-        _timerText.text = $"{(int)(value / 60)}:{(int)(value % 60)}";
+        var m = (int)(value / 60);
+        var s = (int)(value % 60);
+        _timerText.text = $"{(m.ToString().Length == 1 ? $"0{m}" : m)}:{(s.ToString().Length == 1 ? $"0{s}" : s)}";
     }
 
     private void DisableTimer(RaceState state)

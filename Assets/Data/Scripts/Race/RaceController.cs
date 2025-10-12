@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Zenject;
 
 public class RaceController
 {
@@ -30,7 +29,7 @@ public class RaceController
 
     public RaceController(List<CheckpointModel> checkpoints)
     {
-        _lapsToComplete = 3;
+        _lapsToComplete = 2;
         _checkpoints = checkpoints;
         Init();
     }

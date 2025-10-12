@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.InputSystem;
 using Zenject;
 
@@ -14,6 +14,7 @@ public class PlayerInputController : MonoBehaviour
         _controls = controls;
         _controls.CarController.Break.canceled += UnPressed;
         _controls.CarController.Break.performed += Pressed;
+        _controls.Pause.Pause.performed += Pause;
     }
 
     private void OnEnable() => _controls.Enable();
@@ -21,6 +22,7 @@ public class PlayerInputController : MonoBehaviour
 
     private void Pressed(InputAction.CallbackContext cntx) { viewModel.SetBrakes(true); }
     private void UnPressed(InputAction.CallbackContext cntx) { viewModel.SetBrakes(false); }
+    private void Pause(InputAction.CallbackContext cntx) { viewModel.SetPaused(!viewModel.Paused.Value); }
 
     private void Update()
     {

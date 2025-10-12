@@ -1,4 +1,4 @@
-using Cysharp.Threading.Tasks;
+﻿using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
@@ -32,6 +32,7 @@ public class CarSelectModel
     public void LoadScene()
     {
         LoadSceneAsync().Forget();
+        _container.ReleaseCars();
     }
 
     private async UniTaskVoid LoadSceneAsync()

@@ -31,6 +31,10 @@ public class PlayerView : MonoBehaviour
     private float blwTorque = 0;
     private float brwTorque = 0;
     private bool isPaused;
+    private bool _isForward = false;
+    private bool _isBack = false;
+    private float _forwardValue = 0;
+    private float _reverseValue = 0;
 
     private PlayerInputViewModel inputVM;
 
@@ -57,12 +61,14 @@ public class PlayerView : MonoBehaviour
                     _leftBackCollider.motorTorque = 0;
                     _rightFrontCollider.motorTorque = 0;
                     _leftFrontCollider.motorTorque = 0;
+                    _rb.linearVelocity = Vector3.zero;
 
                     isPaused = true;
                 }
                 else
                 { 
                     isPaused = false;
+                    _rb.linearVelocity = _lastVelocity;
                     _rightBackCollider.motorTorque = flwTorque;
                     _leftBackCollider.motorTorque = frwTorque;
                     _rightFrontCollider.motorTorque = blwTorque;
@@ -104,19 +110,13 @@ public class PlayerView : MonoBehaviour
 
     private void Move(float value)
     {
-        if (isPaused) return;
-        _rightBackCollider.motorTorque = value * _motorTorque;
-        _leftBackCollider.motorTorque = value * _motorTorque;
-        //_rightFrontCollider.motorTorque = value * _motorTorque;
-        //_leftFrontCollider.motorTorque = value * _motorTorque;
+        _isForward = value > 0.1;
+        _forwardValue = value;
     }
     private void MoveReverse(float value)
     {
-        if (isPaused) return;
-        _rightBackCollider.motorTorque = -value * _motorTorqueReverse;
-        _leftBackCollider.motorTorque = -value * _motorTorqueReverse;
-        //_rightFrontCollider.motorTorque = -value * _motorTorque;
-        //_leftFrontCollider.motorTorque = -value * _motorTorque;
+        _isBack = value > 0;
+        _reverseValue = -value;
     }
 
     private void OnMove(Vector2 move)
@@ -126,6 +126,22 @@ public class PlayerView : MonoBehaviour
     }
     private void FixedUpdate()
     {
+        if(isPaused) return;
+        if (_isBack)
+        {
+            _rightBackCollider.motorTorque = _reverseValue * _motorTorqueReverse;
+            _leftBackCollider.motorTorque = _reverseValue * _motorTorqueReverse;
+        }
+        else if (_isForward)
+        {
+            _leftBackCollider.motorTorque = _forwardValue * _motorTorque;
+            _rightBackCollider.motorTorque = _forwardValue * _motorTorque;
+        }
+        else
+        { 
+            _leftBackCollider.motorTorque = 0;
+            _rightBackCollider.motorTorque = 0;
+        } 
         UpdateWheelPose(_rightFrontCollider, _rightFrontTransform);
         UpdateWheelPose(_leftFrontCollider, _leftFrontTransform);
         UpdateWheelPose(_rightBackCollider, _rightBackTransform);

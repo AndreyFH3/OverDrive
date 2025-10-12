@@ -43,5 +43,11 @@ public class PlayerCarInstaller : MonoInstaller
 
         Container.BindInstance(checkpointModels).AsSingle();
         Container.BindInstance(checkpointViewModels).AsSingle();
+
+        Container.Bind<RacePauseUIViewModel>().AsSingle();
+        Container.Bind<RacePauseUIView>().FromComponentInHierarchy().AsSingle();
+
+        Container.Bind<RaceFinishUIViewModel>().AsSingle();
+        Container.Bind<RaceFinishUIView>().FromComponentInHierarchy().AsSingle();
     }
 }

@@ -1,6 +1,7 @@
-using System;
+﻿using System;
 using UniRx;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CarSelectViewModel
 {
@@ -20,6 +21,13 @@ public class CarSelectViewModel
         {
             _carTransformStream.OnNext(transform);
         });
+        SceneManager.activeSceneChanged += Release;
+    }
+
+    private void Release(Scene scene1, Scene scene2)
+    {
+        _container.ReleaseCars();
+        SceneManager.activeSceneChanged -= Release;
     }
 
     public void SetNextCar()

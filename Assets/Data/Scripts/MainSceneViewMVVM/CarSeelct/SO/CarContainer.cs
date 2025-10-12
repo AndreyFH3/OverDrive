@@ -5,6 +5,8 @@ using UniRx;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine.SceneManagement;
+using Zenject;
 
 [CreateAssetMenu(fileName = "CarContainer", menuName = "Containers/Car", order = 1)]
 public class CarContainer : ScriptableObject
@@ -12,7 +14,7 @@ public class CarContainer : ScriptableObject
     [SerializeField] private List<string> _carIds;
     private readonly Dictionary<string, AsyncOperationHandle<GameObject>> _cache = new();
     public string[] CarIds => _carIds.ToArray();
-
+    
     private async UniTask<Transform> LoadCarInternal(string id)
     {
         if (_cache.TryGetValue(id, out var handle))
