@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Runtime.CompilerServices;
 using System.Threading;
-using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using UniRx;
 using UnityEngine;
@@ -85,7 +83,6 @@ public class RaceUIViewModel
     {
         _controller.OnRaceStateChanged += SetRaceCondition;
         _controller.OnLapCompleted += SetLap;
-        _controller.OnRaceFinished += RaceFinished;
         _controller.OnRaceTimerUpdated += SetTimer;
     }
 
@@ -98,12 +95,6 @@ public class RaceUIViewModel
     {
         _raceState.Value = state;
     }
-
-    private void RaceFinished()
-    {
-        SceneManager.LoadScene(0);
-    }
-
     private void SetLap(int value)
     {
         var cartage = (value, _controller.LapsToComplete);

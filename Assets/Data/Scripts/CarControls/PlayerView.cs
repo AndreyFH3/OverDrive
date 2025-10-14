@@ -52,6 +52,9 @@ public class PlayerView : MonoBehaviour
                 if (state != RaceState.Running && state != RaceState.Finished)
                 {
                     _lastVelocity = _rb.linearVelocity;
+                    _rb.linearVelocity = Vector3.zero;
+                    _rb.freezeRotation = true;
+
                     flwTorque = _rightBackCollider.motorTorque;
                     frwTorque = _leftBackCollider.motorTorque;
                     blwTorque = _rightFrontCollider.motorTorque;
@@ -61,7 +64,6 @@ public class PlayerView : MonoBehaviour
                     _leftBackCollider.motorTorque = 0;
                     _rightFrontCollider.motorTorque = 0;
                     _leftFrontCollider.motorTorque = 0;
-                    _rb.linearVelocity = Vector3.zero;
 
                     isPaused = true;
                 }
@@ -69,6 +71,7 @@ public class PlayerView : MonoBehaviour
                 { 
                     isPaused = false;
                     _rb.linearVelocity = _lastVelocity;
+                    _rb.freezeRotation = false;
                     _rightBackCollider.motorTorque = flwTorque;
                     _leftBackCollider.motorTorque = frwTorque;
                     _rightFrontCollider.motorTorque = blwTorque;
@@ -126,7 +129,11 @@ public class PlayerView : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        if(isPaused) return;
+        if(isPaused) 
+        {
+            _rb.linearVelocity = Vector3.zero;
+            return;
+        }
         if (_isBack)
         {
             _rightBackCollider.motorTorque = _reverseValue * _motorTorqueReverse;
